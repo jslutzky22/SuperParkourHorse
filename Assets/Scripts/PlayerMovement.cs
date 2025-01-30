@@ -35,6 +35,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float horizontalThrustForce;
     [SerializeField] private float forwardThrustForce;
     [SerializeField] private float extendCableSpeed;
+    [Header("Prediction")]
+    [SerializeField] private RaycastHit predictionHit;
+    [SerializeField] private float predictionSphereCastRadius;
+    [SerializeField] private Transform predictionPoint;
 
 
     [Header("Ground Check")]
@@ -70,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
         {
             AirMovement();
         }
+        CheckForSwingPoints();
         //Debug.Log(grounded);
         //Debug.Log(horizontal);
         //Debug.Log(vertical);
@@ -161,26 +166,84 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
+    private void CheckForSwingPoints()
+    {
+        {
+            if (joint != null) return;
+
+            RaycastHit sphereCastHit;
+            RaycastHit raycastHit;
+
+            // Get screen center position
+            Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f + 20f);
+
+            // Create a ray from the camera through the center of the screen
+            Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+
+            // Debugging: Draw the ray in Scene view
+            Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
+
+            // SphereCast for better detection
+            Physics.SphereCast(ray.origin, predictionSphereCastRadius, ray.direction, out sphereCastHit, maxSwingDistance, whatIsGrappleable);
+
+            // Raycast for direct line of sight
+            Physics.Raycast(ray, out raycastHit, maxSwingDistance, whatIsGrappleable);
+
+            Vector3 realHitPoint;
+
+            // Direct Hit
+            if (raycastHit.point != Vector3.zero)
+            {
+                realHitPoint = raycastHit.point;
+            }
+            // Indirect (predicted) hit
+            else if (sphereCastHit.point != Vector3.zero)
+            {
+                realHitPoint = sphereCastHit.point;
+            }
+            else
+            {
+                realHitPoint = Vector3.zero;
+            }
+
+            // Hit was found
+            if (realHitPoint != Vector3.zero)
+            {
+                predictionPoint.gameObject.SetActive(true);
+                predictionPoint.position = realHitPoint;
+            }
+            else
+            {
+                predictionPoint.gameObject.SetActive(false);
+            }
+
+            predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+        }
+
+    }
     private void StartSwing()
     {
-        RaycastHit hit;
+        if (predictionHit.point == Vector3.zero) return;
+        //RaycastHit hit;
         //Debug.DrawRay(player.position, cam.forward * maxSwingDistance, Color.red, 2f);
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        //Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()); works
 
-        Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
+        //Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
 
         //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
         //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
         //Vector3 grappleDirection = (combatLookAt.position - gunTip.position).normalized;
         //if (Physics.Raycast(gunTip.position, grappleDirection, out hit, maxSwingDistance, whatIsGrappleable))
         //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
-        if (Physics.Raycast(ray, out hit, maxSwingDistance, whatIsGrappleable))
-        {
+        //if (Physics.Raycast(ray, out hit, maxSwingDistance, whatIsGrappleable)) works
+        //if (Physics.Raycast(cam.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
+       // {
             swinging = true;
             moveSpeed = swingSpeed;
-            Debug.Log("Grapple hit: " + hit.collider.gameObject.name);
+            //Debug.Log("Grapple hit: " + hit.collider.gameObject.name);
 
-            swingPoint = hit.point;
+            //swingPoint = hit.point;
+            swingPoint = predictionHit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = swingPoint;
@@ -204,11 +267,11 @@ public class PlayerMovement : MonoBehaviour
                 Debug.LogError("SpringJoint not created!");
             }
 
-        }
-        else
-        {
-            Debug.Log("No grapple hit.");
-        }
+        //}
+        //else
+        //{
+            //Debug.Log("No grapple hit.");
+        //}
     }
 
     private void AirMovement()

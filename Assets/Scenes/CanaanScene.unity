@@ -243,7 +243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &151627841
 RectTransform:
   m_ObjectHideFlags: 0
@@ -401,12 +401,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 151627840}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -712,8 +712,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0.0000038146973}
+  m_SizeDelta: {x: 630.178, y: 366.388}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &403038417
 MonoBehaviour:
@@ -846,8 +846,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100, y: -38.388}
-  m_SizeDelta: {x: 200, y: 76.775}
+  m_AnchoredPosition: {x: -136.079, y: -38.388}
+  m_SizeDelta: {x: 272.159, y: 76.775}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &515673675
 MonoBehaviour:
@@ -1558,6 +1558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1677291313}
   - component: {fileID: 1677291312}
+  - component: {fileID: 1677291314}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1580,10 +1581,9 @@ MonoBehaviour:
   timerText: {fileID: 515673675}
   countdownText: {fileID: 403038417}
   currentTime: 0
-  countUp: 0
   gameStarted: 0
   gameFinished: 0
-  myPlayerInput: {fileID: 0}
+  myPlayerInput: {fileID: 1677291314}
   pauseMenuUI: {fileID: 151627840}
 --- !u!4 &1677291313
 Transform:
@@ -1600,6 +1600,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1677291314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677291311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: ac35267ad95806c439e43309f8b5cb44, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &2083005868
 GameObject:
   m_ObjectHideFlags: 0

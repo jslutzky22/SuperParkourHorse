@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     public float currentTime;
 
-    public bool countUp;
+    private bool countUp = true;
     public bool gameStarted;
     public bool gameFinished;
     public static bool gameIsPaused = false;
@@ -22,23 +23,28 @@ public class GameManager : MonoBehaviour
     public PlayerInput myPlayerInput;
     private InputAction pauseAction;
 
-
-    public GameObject pauseMenuUI;
-
-    private void Awake()
-    {
-        myPlayerInput.currentActionMap.Enable();
-        pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
-
-        pauseAction.started += Pause_started;
-
-    }
+    [SerializeField]
+    private GameObject pauseMenuUI;
 
     // Timer & Countdown
     void Start()
     {
+       
+               myPlayerInput.currentActionMap.Enable();
+        pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
+
+        pauseAction.started += Pause_started;
+        
+
+
         StartCoroutine(CountdownCoroutine());
 
+    }
+
+    void OnDestroy() 
+    
+         {
+        pauseAction.started -= Pause_started;
     }
 
     IEnumerator CountdownCoroutine()
@@ -127,6 +133,7 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         gameFinished = false;
         gameIsPaused = false;
+        
 
         // Resuming time in case the game is paused
         Time.timeScale = 1f;

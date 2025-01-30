@@ -19,6 +19,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float airMultiplier;
+    [SerializeField] private float currentSpeed;
+    [SerializeField] private float speedMult;
+    [SerializeField] private float speedBase;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float xVelocity;
+    [SerializeField] private float zVelocity;
     bool readyToJump = true;
     [Header("Grapple Stuff")]
     [SerializeField] private LineRenderer lr;
@@ -78,6 +84,9 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(grounded);
         //Debug.Log(horizontal);
         //Debug.Log(vertical);
+        currentSpeed = (Mathf.Abs(rb.velocity.x)) + (Mathf.Abs(rb.velocity.z));
+        xVelocity = rb.velocity.x;
+        zVelocity = rb.velocity.z;
     }
     private void LateUpdate()
     {
@@ -130,13 +139,17 @@ public class PlayerMovement : MonoBehaviour
         _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
         if(grounded)
         {
-            rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(_moveDirection.normalized * ((currentSpeed * speedMult) + speedBase) * moveSpeed * 10f, ForceMode.Force);
         }
         else if(!grounded)
         {
-            rb.AddForce(_moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(_moveDirection.normalized * ((currentSpeed * speedMult) + speedBase) * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
         //rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        //for speedmult it cannot go at or below 0.05, 0.06 or above works
+        //speedmult is the percentage of current speed added to current speed to add acceleration
+        //speedbase is the amount added to currentspeed so it doesnt multiply everything by 0
     }
 
     private void Jump()
@@ -155,12 +168,13 @@ public class PlayerMovement : MonoBehaviour
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        maxSpeed = 30f;
 
-        if(flatVel.magnitude > moveSpeed)
+        if(flatVel.magnitude > maxSpeed)
         {
             if (swinging == false)
             {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                Vector3 limitedVel = flatVel.normalized * maxSpeed;
                 rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
             }
         }

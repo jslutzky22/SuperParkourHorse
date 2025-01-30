@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float defaultSpeed;
     [SerializeField] private Vector3 _moveDirection;
     PlayerInput playerInput;
     InputAction moveAction;
@@ -19,11 +20,28 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float airMultiplier;
     bool readyToJump = true;
+    [Header("Grapple Stuff")]
+    [SerializeField] private LineRenderer lr;
+    [SerializeField] private Transform gunTip, cam, player;
+    //[SerializeField] private Transform combatLookAt;
+    [SerializeField] private LayerMask whatIsGrappleable;
+    [SerializeField] private float maxSwingDistance = 25f;
+    private Vector3 swingPoint;
+    private SpringJoint joint;
+    private Vector3 currentGrapplePosition;
+    [SerializeField] private float swingSpeed;
+    bool swinging;
+    [Header("AirMovement")]
+    [SerializeField] private float horizontalThrustForce;
+    [SerializeField] private float forwardThrustForce;
+    [SerializeField] private float extendCableSpeed;
+
 
     [Header("Ground Check")]
     [SerializeField] private float playerHeight;
     [SerializeField] private LayerMask whatIsGround;
     bool grounded;
+    bool shortenCable;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +66,17 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = 0;
         }
         SpeedControl();
+        if (joint != null)
+        {
+            AirMovement();
+        }
         //Debug.Log(grounded);
+        //Debug.Log(horizontal);
+        //Debug.Log(vertical);
+    }
+    private void LateUpdate()
+    {
+        DrawRope();
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -58,11 +86,35 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        if (readyToJump && grounded)
+        if(context.performed)
         {
-            readyToJump = false;
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
+            if (readyToJump && grounded)
+            {
+                readyToJump = false;
+                Jump();
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+            if (swinging)
+            {
+                shortenCable = true;
+            }
+        }
+        if (context.canceled)
+        {
+            shortenCable = false;
+        }
+
+    }
+    public void Swing(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            StartSwing();
+            Debug.Log("swingShot");
+        }
+        if (context.canceled)
+        {
+            StopSwing();
         }
     }
 
@@ -101,9 +153,112 @@ public class PlayerMovement : MonoBehaviour
 
         if(flatVel.magnitude > moveSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            if (swinging == false)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
         }
+    }
+    
+    private void StartSwing()
+    {
+        RaycastHit hit;
+        //Debug.DrawRay(player.position, cam.forward * maxSwingDistance, Color.red, 2f);
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
+
+        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
+        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
+        //Vector3 grappleDirection = (combatLookAt.position - gunTip.position).normalized;
+        //if (Physics.Raycast(gunTip.position, grappleDirection, out hit, maxSwingDistance, whatIsGrappleable))
+        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
+        if (Physics.Raycast(ray, out hit, maxSwingDistance, whatIsGrappleable))
+        {
+            swinging = true;
+            moveSpeed = swingSpeed;
+            Debug.Log("Grapple hit: " + hit.collider.gameObject.name);
+
+            swingPoint = hit.point;
+            joint = player.gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            joint.connectedAnchor = swingPoint;
+
+            float distanceFromPoint = Vector3.Distance(player.position, swingPoint);
+
+            //Distance grapple will try to keep from grapple point
+            joint.maxDistance = distanceFromPoint * 0.8f;
+            joint.minDistance = distanceFromPoint * 0.25f;
+
+            //Variables that will make adjust the feel of the swing
+            joint.spring = 4.5f;
+            joint.damper = 7f;
+            joint.massScale = 4.5f;
+
+            lr.positionCount = 2;
+            currentGrapplePosition = gunTip.position;
+            Debug.Log("Line renderer enabled: " + (lr.positionCount > 0));
+            if (joint == null)
+            {
+                Debug.LogError("SpringJoint not created!");
+            }
+
+        }
+        else
+        {
+            Debug.Log("No grapple hit.");
+        }
+    }
+
+    private void AirMovement()
+    {
+        if (horizontal == 1) //Pressing Right
+        {
+            rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
+        }
+        if (horizontal == -1) //Pressing left
+        {
+            rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
+        }
+        if (vertical == 1) //Pressing Forward
+        {
+            rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
+        }
+        if (shortenCable == true)
+        {
+            Vector3 directionToPoint = swingPoint - transform.position;
+            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
+
+            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
+
+            joint.maxDistance = distanceFromPoint * 0.8f;
+            joint.minDistance = distanceFromPoint * 0.25f;
+        }
+        if (vertical == -1) //Pressing backward
+        {
+            float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
+
+            joint.maxDistance = extendedDistanceFromPoint * 0.8f;
+            joint.minDistance = extendedDistanceFromPoint * 0.25f;
+        }
+    }
+    private void StopSwing()
+    {
+        lr.positionCount = 0;
+        Destroy(joint);
+        swinging = false;
+        moveSpeed = defaultSpeed;
+    }
+    private void DrawRope()
+    {
+        if (!joint) return;
+
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * 8f);
+        lr.SetPosition(0, gunTip.position);
+        lr.SetPosition(1, swingPoint);
+        Debug.Log("LineRenderer status: " + lr.positionCount);
+
     }
 
 }

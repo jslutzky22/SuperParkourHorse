@@ -56,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Checkpoints")]
     [SerializeField] public Vector3 lastCheckpointActivated;
+    private bool resetPressed;
 
     // Start is called before the first frame update
     void Start()
@@ -123,6 +124,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+    public void Restart(InputAction.CallbackContext context)
+    {
+        if (resetPressed == false)
+        {
+            resetPressed = true;
+            LoadToCheckpoint();
+        }
+        
+    }
+
+    public void Quit(InputAction.CallbackContext context)
+    {
+        Application.Quit();
+
+    }
+
     public void Swing(InputAction.CallbackContext context)
     {
         if (context.performed)

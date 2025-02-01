@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     bool grounded;
     bool shortenCable;
+
+    [Header("Checkpoints")]
+    [SerializeField] public Vector3 lastCheckpointActivated;
 
     // Start is called before the first frame update
     void Start()
@@ -338,4 +342,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Call this when the player dies (or if we have a last checkpoint button, there too) to return them to the checkpoint.
+    /// </summary>
+    private void LoadToCheckpoint()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        transform.position = lastCheckpointActivated + new Vector3 (0,1,0);
+    }
 }

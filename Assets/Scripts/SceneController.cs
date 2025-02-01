@@ -10,6 +10,12 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(" ");
 
     }
+    public void LoadStartMenu()
+    {
+        SceneManager.LoadScene("Start Menu");
+
+    }
+
 
     public void ExitButton()
     {

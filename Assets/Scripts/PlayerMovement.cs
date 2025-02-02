@@ -361,11 +361,24 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Call this when the player dies (or if we have a last checkpoint button, there too) to return them to the checkpoint.
+    /// Loads the player to their last checkpoint if they touch the KillPlane.
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (gameObject.name == "KillPlane")
+        {
+            LoadToCheckpoint();
+        }
+    }
+
+    /// <summary>
+    /// Called when the player falls onto the killplane (or if we implement a last checkpoint button, there too) to 
+    /// return them to the checkpoint. This does not reset anything in the level, and keeps the timer counting up so 
+    /// players cannot just keep dying to reset the timer.
     /// </summary>
     private void LoadToCheckpoint()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         transform.position = lastCheckpointActivated + new Vector3 (0,1,0);
     }
 }

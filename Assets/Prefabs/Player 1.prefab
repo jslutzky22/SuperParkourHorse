@@ -298,13 +298,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4792929310070787023}
   moveSpeed: 10
-  defaultSpeed: 40
+  defaultSpeed: 18
   _moveDirection: {x: 0, y: 0, z: 0}
   orientation: {fileID: 335910268533471454}
   groundDrag: 5
-  jumpForce: 12
+  jumpForce: 20
   jumpCooldown: 0.25
-  airMultiplier: 0.4
+  airMultiplier: 0.3
   currentSpeed: 0
   speedMult: 0.06
   speedBase: 0.06
@@ -320,8 +320,8 @@ MonoBehaviour:
     m_Bits: 384
   maxSwingDistance: 50
   swingSpeed: 5
-  horizontalThrustForce: 2000
-  forwardThrustForce: 3000
+  horizontalThrustForce: 3000
+  forwardThrustForce: 3500
   extendCableSpeed: 20
   predictionSphereCastRadius: 10
   predictionPoint: {fileID: 0}

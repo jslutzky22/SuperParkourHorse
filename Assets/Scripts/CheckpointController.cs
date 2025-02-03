@@ -6,13 +6,15 @@ using UnityEngine.SceneManagement;
 public class CheckpointController : MonoBehaviour
 {
     [SerializeField] public Vector3 checkpointPosition;
-    [SerializeField] public PlayerMovement PlayerScript;
+    public PlayerMovement PlayerScript;
+    [SerializeField] public GameObject PlayerObject;
 
     /// <summary>
     /// saves the position of the checkpoint for the player to return to.
     /// </summary>
     private void Start()
     {
+        PlayerScript = PlayerMovement.Instance;
         checkpointPosition = transform.position;
     }
 

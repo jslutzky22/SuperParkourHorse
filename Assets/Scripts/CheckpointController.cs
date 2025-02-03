@@ -24,8 +24,6 @@ public class CheckpointController : MonoBehaviour
     /// <param name="Player"></param>
     private void OnTriggerEnter(Collider Player)
     {
-        Debug.Log(PlayerScript.lastCheckpointActivated);
         PlayerScript.lastCheckpointActivated = checkpointPosition;
-        Debug.Log(PlayerScript.lastCheckpointActivated);
     }
 }

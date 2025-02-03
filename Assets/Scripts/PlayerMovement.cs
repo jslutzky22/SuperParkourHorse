@@ -372,10 +372,8 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="KillPlane"></param>
     private void OnTriggerEnter(Collider KillPlane)
     {
-        Debug.Log(lastCheckpointActivated);
         if (KillPlane.gameObject.tag == "KillPlane")
         {
-            Debug.Log(this.lastCheckpointActivated);
             LoadToCheckpoint();
         }
     }
@@ -387,7 +385,6 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void LoadToCheckpoint()
     {
-        Debug.Log(this.lastCheckpointActivated);
         transform.position = this.lastCheckpointActivated + new Vector3 (0,1,0);
     }
 }

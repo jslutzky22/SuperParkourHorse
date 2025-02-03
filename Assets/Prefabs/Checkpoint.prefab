@@ -120,3 +120,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
   PlayerScript: {fileID: 5754463710097509581, guid: 8020e6e95ad4eb8409c975c3469c4398, type: 3}
+  PlayerObject: {fileID: 4896829447591779819, guid: 8020e6e95ad4eb8409c975c3469c4398, type: 3}

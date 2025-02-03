@@ -55,8 +55,14 @@ public class PlayerMovement : MonoBehaviour
     bool shortenCable;
 
     [Header("Checkpoints")]
-    [SerializeField] public Vector3 lastCheckpointActivated;
+    public Vector3 lastCheckpointActivated;
     private bool resetPressed;
+    public static PlayerMovement Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -363,11 +369,13 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Loads the player to their last checkpoint if they touch the KillPlane.
     /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
+    /// <param name="KillPlane"></param>
+    private void OnTriggerEnter(Collider KillPlane)
     {
-        if (gameObject.name == "KillPlane")
+        Debug.Log(lastCheckpointActivated);
+        if (KillPlane.gameObject.tag == "KillPlane")
         {
+            Debug.Log(this.lastCheckpointActivated);
             LoadToCheckpoint();
         }
     }
@@ -379,6 +387,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void LoadToCheckpoint()
     {
-        transform.position = lastCheckpointActivated + new Vector3 (0,1,0);
+        Debug.Log(this.lastCheckpointActivated);
+        transform.position = this.lastCheckpointActivated + new Vector3 (0,1,0);
     }
 }

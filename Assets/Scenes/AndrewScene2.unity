@@ -4342,7 +4342,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901352797}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1240662, y: 0.1117375, z: 0.014061645, w: 0.9858624}
+  m_LocalRotation: {x: -0.124066204, y: 0.11173751, z: 0.0140616475, w: 0.9858624}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4421,7 +4421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1910041463}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.14437488, y: 0.111423664, z: 0.016363425, w: 0.9830936}
+  m_LocalRotation: {x: -0.14437489, y: 0.11142369, z: 0.01636343, w: 0.98309356}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4931,10 +4931,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4792929310070787023, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
-      propertyPath: m_Mass
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
       propertyPath: cam
       value: 
@@ -4943,18 +4939,6 @@ PrefabInstance:
       propertyPath: gunTip
       value: 
       objectReference: {fileID: 146169400}
-    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
-      propertyPath: jumpForce
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
-      propertyPath: defaultSpeed
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
-      propertyPath: airMultiplier
-      value: 0.3
-      objectReference: {fileID: 0}
     - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
       propertyPath: predictionPoint
       value: 

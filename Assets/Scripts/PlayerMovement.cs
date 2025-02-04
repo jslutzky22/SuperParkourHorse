@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (resetPressed == false)
         {
-            resetPressed = true;
+            //resetPressed = true; With the way things are coded, we can't have a true restart
             LoadToCheckpoint();
         }
         
@@ -376,7 +376,18 @@ public class PlayerMovement : MonoBehaviour
         {
             LoadToCheckpoint();
         }
+
+        if (KillPlane.gameObject.tag == "Goal")
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            
+        }
+
     }
+
+   
 
     /// <summary>
     /// Called when the player falls onto the killplane (or if we implement a last checkpoint button, there too) to 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float xVelocity;
     [SerializeField] private float zVelocity;
     bool readyToJump = true;
+    [SerializeField] private float accelerationAmount;
     [Header("Grapple Stuff")]
     [SerializeField] private LineRenderer lr;
     [SerializeField] private Transform gunTip, cam, player;
@@ -59,6 +61,9 @@ public class PlayerMovement : MonoBehaviour
     private bool resetPressed;
     public static PlayerMovement Instance;
 
+    [Header("Testing Variables")]
+    [SerializeField] TMP_Text TestText;
+
     private void Awake()
     {
         Instance = this;
@@ -74,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         MovePlayer();
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
@@ -95,9 +100,23 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log(grounded);
         //Debug.Log(horizontal);
         //Debug.Log(vertical);
-        currentSpeed = (Mathf.Abs(rb.velocity.x)) + (Mathf.Abs(rb.velocity.z));
-        xVelocity = rb.velocity.x;
-        zVelocity = rb.velocity.z;
+        xVelocity = Mathf.Abs(rb.velocity.x);
+        zVelocity = Mathf.Abs(rb.velocity.z);
+
+        if (xVelocity < 0.5f && xVelocity > 0)
+        {
+            xVelocity = 0.5f;
+        }
+        if (zVelocity < 0.5f && zVelocity > 0)
+        {
+            zVelocity = 0.5f;
+        }
+
+        currentSpeed = xVelocity + zVelocity;
+
+        TestText.text = "Move Speed: " + moveSpeed + "\r\nDefault Speed: " + defaultSpeed + "\r\nCurrent Speed: " +
+            currentSpeed + "\r\nSpeed Base: " + speedBase + "\r\nSpeed Mult: " + speedMult + "\r\nMax Speed: " +
+            maxSpeed + "\r\nX Velocity: " + xVelocity + "\r\nZ Velocity: " + zVelocity;
     }
     private void LateUpdate()
     {
@@ -144,7 +163,6 @@ public class PlayerMovement : MonoBehaviour
     public void Quit(InputAction.CallbackContext context)
     {
         Application.Quit();
-
     }
 
     public void Swing(InputAction.CallbackContext context)
@@ -167,11 +185,25 @@ public class PlayerMovement : MonoBehaviour
         _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
         if(grounded)
         {
-            rb.AddForce(_moveDirection.normalized * ((currentSpeed * speedMult) + speedBase) * moveSpeed * 10f, ForceMode.Force);
+            accelerationAmount = (currentSpeed * speedMult) + speedBase;
+
+            if (accelerationAmount < 0.001)
+            {
+                accelerationAmount = 0.001f;
+            }
+
+            rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f, ForceMode.Force);
         }
         else if(!grounded)
         {
-            rb.AddForce(_moveDirection.normalized * ((currentSpeed * speedMult) + speedBase) * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            accelerationAmount = (currentSpeed * speedMult) + speedBase;
+
+            if (accelerationAmount < 0.001)
+            {
+                accelerationAmount = 0.001f;
+            }
+
+            rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
         //rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 

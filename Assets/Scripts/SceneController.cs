@@ -7,7 +7,7 @@ public class SceneController : MonoBehaviour
 {
     public void LoadLevel()
     {
-        SceneManager.LoadScene(" ");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     }
     public void LoadStartMenu()

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI countdownText;
+    public GameObject countdownTextSprite;
 
     public float currentTime;
 
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
         countdownText.text = "";
+        countdownTextSprite.SetActive(false);
         yield return null;
     }
 
@@ -99,11 +101,12 @@ public class GameManager : MonoBehaviour
         if (gameIsPaused)
         {
             Pause();
-
+            //Cursor.lockState = CursorLockMode.None;
         }
         else
         {
             Resume();
+            //Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -112,6 +115,7 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         gameIsPaused = true;
@@ -122,6 +126,7 @@ public class GameManager : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         gameIsPaused = false;
@@ -142,6 +147,11 @@ public class GameManager : MonoBehaviour
 
         // Reloading the active scene to restart the game
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
 

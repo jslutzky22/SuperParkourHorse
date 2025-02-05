@@ -61,9 +61,6 @@ public class PlayerMovement : MonoBehaviour
     private bool resetPressed;
     public static PlayerMovement Instance;
 
-    [Header("Testing Variables")]
-    [SerializeField] TMP_Text TestText;
-
     private void Awake()
     {
         Instance = this;
@@ -113,10 +110,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         currentSpeed = xVelocity + zVelocity;
-
-        TestText.text = "Move Speed: " + moveSpeed + "\r\nDefault Speed: " + defaultSpeed + "\r\nCurrent Speed: " +
-            currentSpeed + "\r\nSpeed Base: " + speedBase + "\r\nSpeed Mult: " + speedMult + "\r\nMax Speed: " +
-            maxSpeed + "\r\nX Velocity: " + xVelocity + "\r\nZ Velocity: " + zVelocity;
     }
     private void LateUpdate()
     {

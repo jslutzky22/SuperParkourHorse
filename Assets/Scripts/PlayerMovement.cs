@@ -8,10 +8,10 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private Rigidbody rb;
+    public Rigidbody rb;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float defaultSpeed;
-    [SerializeField] private Vector3 _moveDirection;
+    [SerializeField] public Vector3 _moveDirection;
     PlayerInput playerInput;
     InputAction moveAction;
     private float vertical;
@@ -60,6 +60,9 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 lastCheckpointActivated;
     private bool resetPressed;
     public static PlayerMovement Instance;
+
+    [Header("CutsceneMode")]
+    [SerializeField] public bool cutsceneMode;
 
     private void Awake()
     {
@@ -118,29 +121,34 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        horizontal = context.ReadValue<Vector2>().x;
-        vertical = context.ReadValue<Vector2>().y;
+        if (!cutsceneMode)
+        {
+            horizontal = context.ReadValue<Vector2>().x;
+            vertical = context.ReadValue<Vector2>().y;
+        }
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (!cutsceneMode)
         {
-            if (readyToJump && grounded)
+            if (context.performed)
             {
-                readyToJump = false;
-                Jump();
-                Invoke(nameof(ResetJump), jumpCooldown);
+                if (readyToJump && grounded)
+                {
+                    readyToJump = false;
+                    Jump();
+                    Invoke(nameof(ResetJump), jumpCooldown);
+                }
+                if (swinging)
+                {
+                    shortenCable = true;
+                }
             }
-            if (swinging)
+            if (context.canceled)
             {
-                shortenCable = true;
+                shortenCable = false;
             }
         }
-        if (context.canceled)
-        {
-            shortenCable = false;
-        }
-
     }
 
     public void Restart(InputAction.CallbackContext context)
@@ -160,10 +168,17 @@ public class PlayerMovement : MonoBehaviour
 
     public void Swing(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!cutsceneMode)
         {
-            StartSwing();
-            Debug.Log("swingShot");
+            if (context.performed)
+            {
+                StartSwing();
+                Debug.Log("swingShot");
+            }
+            if (context.canceled)
+            {
+                StopSwing();
+            }
         }
         if (context.canceled)
         {
@@ -173,43 +188,58 @@ public class PlayerMovement : MonoBehaviour
 
     void MovePlayer()
     {
-        //Debug.Log(moveAction.ReadValue<Vector2>());
-        //rb.velocity = new Vector3(horizontal * moveSpeed, rb.velocity.y, vertical * moveSpeed);
-        _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
-        if(grounded)
+        if (!cutsceneMode)
         {
-            accelerationAmount = (currentSpeed * speedMult) + speedBase;
-
-            if (accelerationAmount < 0.001)
+            //Debug.Log(moveAction.ReadValue<Vector2>());
+            //rb.velocity = new Vector3(horizontal * moveSpeed, rb.velocity.y, vertical * moveSpeed);
+            _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
+            if (grounded)
             {
-                accelerationAmount = 0.001f;
+                accelerationAmount = (currentSpeed * speedMult);
+
+                if (accelerationAmount <= 5)
+                {
+                    accelerationAmount += speedBase;
+                }
+
+                if (accelerationAmount < 0.001)
+                {
+                    accelerationAmount = 0.001f;
+                }
+
+                rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f, ForceMode.Force);
             }
-
-            rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f, ForceMode.Force);
-        }
-        else if(!grounded)
-        {
-            accelerationAmount = (currentSpeed * speedMult) + speedBase;
-
-            if (accelerationAmount < 0.001)
+            else if (!grounded)
             {
-                accelerationAmount = 0.001f;
+                accelerationAmount = (currentSpeed * speedMult);
+
+                if (accelerationAmount <= 5)
+                {
+                    accelerationAmount += speedBase;
+                }
+
+                if (accelerationAmount < 0.001)
+                {
+                    accelerationAmount = 0.001f;
+                }
+
+                rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f * airMultiplier, ForceMode.Force);
             }
+            //rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-            rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            //for speedmult it cannot go at or below 0.05, 0.06 or above works
+            //speedmult is the percentage of current speed added to current speed to add acceleration
+            //speedbase is the amount added to currentspeed so it doesnt multiply everything by 0
         }
-        //rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        //for speedmult it cannot go at or below 0.05, 0.06 or above works
-        //speedmult is the percentage of current speed added to current speed to add acceleration
-        //speedbase is the amount added to currentspeed so it doesnt multiply everything by 0
     }
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.y, 0f, rb.velocity.z);
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        
+        if (!cutsceneMode)
+        {
+            rb.velocity = new Vector3(rb.velocity.y, 0f, rb.velocity.z);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     private void ResetJump()
@@ -235,76 +265,80 @@ public class PlayerMovement : MonoBehaviour
     
     private void CheckForSwingPoints()
     {
+        if (!cutsceneMode)
         {
-            if (joint != null) return;
-
-            RaycastHit sphereCastHit;
-            RaycastHit raycastHit;
-
-            // Get screen center position
-            Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f + 20f);
-
-            // Create a ray from the camera through the center of the screen
-            Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-
-            // Debugging: Draw the ray in Scene view
-            Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
-
-            // SphereCast for better detection
-            Physics.SphereCast(ray.origin, predictionSphereCastRadius, ray.direction, out sphereCastHit, maxSwingDistance, whatIsGrappleable);
-
-            // Raycast for direct line of sight
-            Physics.Raycast(ray, out raycastHit, maxSwingDistance, whatIsGrappleable);
-
-            Vector3 realHitPoint;
-
-            // Direct Hit
-            if (raycastHit.point != Vector3.zero)
             {
-                realHitPoint = raycastHit.point;
-            }
-            // Indirect (predicted) hit
-            else if (sphereCastHit.point != Vector3.zero)
-            {
-                realHitPoint = sphereCastHit.point;
-            }
-            else
-            {
-                realHitPoint = Vector3.zero;
-            }
+                if (joint != null) return;
 
-            // Hit was found
-            if (realHitPoint != Vector3.zero)
-            {
-                predictionPoint.gameObject.SetActive(true);
-                predictionPoint.position = realHitPoint;
-            }
-            else
-            {
-                predictionPoint.gameObject.SetActive(false);
-            }
+                RaycastHit sphereCastHit;
+                RaycastHit raycastHit;
 
-            predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+                // Get screen center position
+                Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f + 20f);
+
+                // Create a ray from the camera through the center of the screen
+                Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+
+                // Debugging: Draw the ray in Scene view
+                Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
+
+                // SphereCast for better detection
+                Physics.SphereCast(ray.origin, predictionSphereCastRadius, ray.direction, out sphereCastHit, maxSwingDistance, whatIsGrappleable);
+
+                // Raycast for direct line of sight
+                Physics.Raycast(ray, out raycastHit, maxSwingDistance, whatIsGrappleable);
+
+                Vector3 realHitPoint;
+
+                // Direct Hit
+                if (raycastHit.point != Vector3.zero)
+                {
+                    realHitPoint = raycastHit.point;
+                }
+                // Indirect (predicted) hit
+                else if (sphereCastHit.point != Vector3.zero)
+                {
+                    realHitPoint = sphereCastHit.point;
+                }
+                else
+                {
+                    realHitPoint = Vector3.zero;
+                }
+
+                // Hit was found
+                if (realHitPoint != Vector3.zero)
+                {
+                    predictionPoint.gameObject.SetActive(true);
+                    predictionPoint.position = realHitPoint;
+                }
+                else
+                {
+                    predictionPoint.gameObject.SetActive(false);
+                }
+
+                predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+            }
         }
-
     }
     private void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero) return;
-        //RaycastHit hit;
-        //Debug.DrawRay(player.position, cam.forward * maxSwingDistance, Color.red, 2f);
-        //Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()); works
+        if (!cutsceneMode)
+        {
+            if (predictionHit.point == Vector3.zero) return;
+            //RaycastHit hit;
+            //Debug.DrawRay(player.position, cam.forward * maxSwingDistance, Color.red, 2f);
+            //Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()); works
 
-        //Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
+            //Debug.DrawRay(ray.origin, ray.direction * maxSwingDistance, Color.green, 2f);
 
-        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
-        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
-        //Vector3 grappleDirection = (combatLookAt.position - gunTip.position).normalized;
-        //if (Physics.Raycast(gunTip.position, grappleDirection, out hit, maxSwingDistance, whatIsGrappleable))
-        //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
-        //if (Physics.Raycast(ray, out hit, maxSwingDistance, whatIsGrappleable)) works
-        //if (Physics.Raycast(cam.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
-       // {
+            //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
+            //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
+            //Vector3 grappleDirection = (combatLookAt.position - gunTip.position).normalized;
+            //if (Physics.Raycast(gunTip.position, grappleDirection, out hit, maxSwingDistance, whatIsGrappleable))
+            //if (Physics.Raycast(player.position, cam.forward, out hit, maxSwingDistance))
+            //if (Physics.Raycast(ray, out hit, maxSwingDistance, whatIsGrappleable)) works
+            //if (Physics.Raycast(cam.position, cam.forward, out hit, maxSwingDistance, whatIsGrappleable))
+            // {
             swinging = true;
             moveSpeed = swingSpeed;
             //Debug.Log("Grapple hit: " + hit.collider.gameObject.name);
@@ -334,11 +368,12 @@ public class PlayerMovement : MonoBehaviour
                 Debug.LogError("SpringJoint not created!");
             }
 
-        //}
-        //else
-        //{
+            //}
+            //else
+            //{
             //Debug.Log("No grapple hit.");
-        //}
+            //}
+        }
     }
 
     private void AirMovement()
@@ -373,7 +408,7 @@ public class PlayerMovement : MonoBehaviour
             joint.minDistance = extendedDistanceFromPoint * 0.25f;
         }
     }
-    private void StopSwing()
+    public void StopSwing()
     {
         lr.positionCount = 0;
         Destroy(joint);

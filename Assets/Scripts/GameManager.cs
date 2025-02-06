@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
             enemyProgressBar.fillAmount = currentTime / raceTime;
         }
 
-        if (currentTime <= raceTime)
+        if (currentTime >= raceTime)
         {
             LoadLoseScene();
         }
@@ -99,7 +99,9 @@ public class GameManager : MonoBehaviour
 
     public void LoadLoseScene()
     {
-        //SceneManager.LoadScene("Start Menu");
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("Lose Scene");
         Debug.Log("You've Lost");
 
     }

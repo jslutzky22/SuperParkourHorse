@@ -3738,7 +3738,7 @@ Transform:
   m_GameObject: {fileID: 1606425202}
   serializedVersion: 2
   m_LocalRotation: {x: -0.10363486, y: 0.112004615, z: 0.011745961, w: 0.988219}
-  m_LocalPosition: {x: 0, y: 0.00000047683716, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4342,7 +4342,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1901352797}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.124066204, y: 0.11173751, z: 0.0140616475, w: 0.9858624}
+  m_LocalRotation: {x: -0.124066204, y: 0.111737505, z: 0.014061644, w: 0.9858624}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4421,7 +4421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1910041463}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.14437489, y: 0.11142369, z: 0.01636343, w: 0.98309356}
+  m_LocalRotation: {x: -0.14437489, y: 0.111423686, z: 0.016363429, w: 0.98309356}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4940,9 +4940,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 146169400}
     - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
+      propertyPath: swingSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
       propertyPath: predictionPoint
       value: 
       objectReference: {fileID: 820797664}
+    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
+      propertyPath: forwardThrustForce
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717376539082042921, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
+      propertyPath: horizontalThrustForce
+      value: 3000
+      objectReference: {fileID: 0}
     - target: {fileID: 8280678294501363534, guid: 5b3b2b282100a4242ad528d1baf2bb18, type: 3}
       propertyPath: m_Name
       value: Player

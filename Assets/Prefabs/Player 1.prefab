@@ -311,6 +311,7 @@ MonoBehaviour:
   maxSpeed: 0
   xVelocity: 0
   zVelocity: 0
+  accelerationAmount: 0
   lr: {fileID: 9079075495718260785}
   gunTip: {fileID: 0}
   cam: {fileID: 0}
@@ -319,9 +320,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   maxSwingDistance: 50
-  swingSpeed: 5
+  swingSpeed: 6
   horizontalThrustForce: 3000
-  forwardThrustForce: 3500
+  forwardThrustForce: 3000
   extendCableSpeed: 20
   predictionSphereCastRadius: 10
   predictionPoint: {fileID: 0}

@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject countdownTextSprite;
 
     public float currentTime;
+    public float raceTime;
+    [SerializeField] private Image enemyProgressBar;
 
     private bool countUp = true;
     public bool gameStarted;
@@ -35,8 +39,8 @@ public class GameManager : MonoBehaviour
         pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
 
         pauseAction.started += Pause_started;
-        
 
+        enemyProgressBar.fillAmount = currentTime / raceTime;
 
         StartCoroutine(CountdownCoroutine());
 
@@ -75,14 +79,28 @@ public class GameManager : MonoBehaviour
         {
             currentTime = countUp ? currentTime += Time.deltaTime : currentTime -= Time.deltaTime;
             SetTimerText();
-
         }
         else if (gameFinished)
         {
             gameStarted = false;
 
         }
+        if (enemyProgressBar.fillAmount < 1)
+        {
+            enemyProgressBar.fillAmount = currentTime / raceTime;
+        }
 
+        if (currentTime <= raceTime)
+        {
+            LoadLoseScene();
+        }
+
+    }
+
+    public void LoadLoseScene()
+    {
+        //SceneManager.LoadScene("Start Menu");
+        Debug.Log("You've Lost");
 
     }
 
@@ -152,6 +170,11 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void LoadStartMenu()
+    {
+        SceneManager.LoadScene("Start Menu");
+
     }
 
 

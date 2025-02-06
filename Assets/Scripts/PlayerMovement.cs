@@ -422,5 +422,6 @@ public class PlayerMovement : MonoBehaviour
     private void LoadToCheckpoint()
     {
         transform.position = this.lastCheckpointActivated + new Vector3 (0,1,0);
+        rb.velocity = Vector3.zero;
     }
 }

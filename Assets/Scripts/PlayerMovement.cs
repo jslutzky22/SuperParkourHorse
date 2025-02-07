@@ -61,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
     private bool resetPressed;
     public static PlayerMovement Instance;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip walkingSound;
+
+
     private void Awake()
     {
         Instance = this;
@@ -73,6 +78,16 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions.FindAction("Move");
+
+        // Initialize audio source if not set in Inspector
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.clip = walkingSound;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
     }
 
     // Update is called once per frame
@@ -80,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
         if (grounded)
         {
             rb.drag = groundDrag;
@@ -88,28 +104,31 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.drag = 0;
         }
+
         SpeedControl();
         if (joint != null)
         {
             AirMovement();
         }
         CheckForSwingPoints();
-        //Debug.Log(grounded);
-        //Debug.Log(horizontal);
-        //Debug.Log(vertical);
+
         xVelocity = Mathf.Abs(rb.velocity.x);
         zVelocity = Mathf.Abs(rb.velocity.z);
 
-        if (xVelocity < 0.5f && xVelocity > 0)
-        {
-            xVelocity = 0.5f;
-        }
-        if (zVelocity < 0.5f && zVelocity > 0)
-        {
-            zVelocity = 0.5f;
-        }
+        if (xVelocity < 0.5f && xVelocity > 0) xVelocity = 0.5f;
+        if (zVelocity < 0.5f && zVelocity > 0) zVelocity = 0.5f;
 
         currentSpeed = xVelocity + zVelocity;
+
+        // Walking sound logic
+        if (grounded && currentSpeed > 0.5f && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        else if ((!grounded || currentSpeed <= 0.5f) && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
     private void LateUpdate()
     {

@@ -362,32 +362,34 @@ public class PlayerMovement : MonoBehaviour
 
     private void AirMovement()
     {
-        if (horizontal == 1) //Pressing Right
+        // Unlimited horizontal movement
+        rb.AddForce(orientation.right * horizontal * horizontalThrustForce * Time.deltaTime, ForceMode.Acceleration);
+        rb.AddForce(orientation.forward * vertical * forwardThrustForce * Time.deltaTime, ForceMode.Acceleration);
+
+        // Limited vertical movement
+        float maxVerticalVelocity = 10f; // Adjust this value to control max vertical speed
+        if (rb.velocity.y > maxVerticalVelocity)
         {
-            rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
+            rb.velocity = new Vector3(rb.velocity.x, maxVerticalVelocity, rb.velocity.z);
         }
-        if (horizontal == -1) //Pressing left
+        if (rb.velocity.y < -maxVerticalVelocity)
         {
-            rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
+            rb.velocity = new Vector3(rb.velocity.x, -maxVerticalVelocity, rb.velocity.z);
         }
-        if (vertical == 1) //Pressing Forward
-        {
-            rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
-        }
-        if (shortenCable == true)
+
+        if (shortenCable)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
-            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
+            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime, ForceMode.Acceleration);
 
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
-
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
         }
-        if (vertical == -1) //Pressing backward
+
+        if (vertical == -1) // Pressing backward
         {
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
-
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
             joint.minDistance = extendedDistanceFromPoint * 0.25f;
         }

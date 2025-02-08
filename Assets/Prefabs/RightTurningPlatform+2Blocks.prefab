@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8338852253943527417}
   m_Layer: 0
-  m_Name: TurningPlatform+2Blocks
+  m_Name: RightTurningPlatform+2Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

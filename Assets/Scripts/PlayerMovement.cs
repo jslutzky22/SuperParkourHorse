@@ -444,10 +444,9 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             
         }
-
     }
 
-   
+
 
     /// <summary>
     /// Called when the player falls onto the killplane (or if we implement a last checkpoint button, there too) to 

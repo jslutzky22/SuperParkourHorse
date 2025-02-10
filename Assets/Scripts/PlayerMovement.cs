@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float currentSpeed;
     [SerializeField] private float speedMult;
     [SerializeField] private float speedBase;
-    [SerializeField] private float maxSpeed;
+    [SerializeField] public float maxSpeed;
     [SerializeField] private float xVelocity;
     [SerializeField] private float zVelocity;
     bool readyToJump = true;

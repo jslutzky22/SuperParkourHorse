@@ -230,6 +230,8 @@ MonoBehaviour:
   playerCamera: {fileID: 2297659860384893442, guid: 1431faa017210974cbf1cac9cc884aea, type: 3}
   hoopContainer: {fileID: 2663662734769320356}
   repeatCount: 0
+  hoopTeleportPoints: {x: 0, y: 0, z: 0}
+  hoopRunning: 0
 --- !u!1 &2130828457924151950
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,7 +928,7 @@ Transform:
   m_GameObject: {fileID: 8562403108664405364}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -9,6 +9,7 @@ public class DashHorseHoop : MonoBehaviour
     [SerializeField] public GameObject playerCamera;
     [SerializeField] private GameObject hoopContainer;
     [SerializeField] private int repeatCount;
+    [SerializeField] private Vector3 hoopTeleportPoints;
     [SerializeField] private bool hoopRunning;
 
     private void Start()
@@ -27,22 +28,24 @@ public class DashHorseHoop : MonoBehaviour
     IEnumerator DashHoopLaunch()
     {
         hoopRunning = true;
-        PlayerScript.rb.velocity = new Vector3(0, 0, 0);
-        PlayerScript._moveDirection = new Vector3(0, 0, 0);
         playerCamera = GameObject.FindWithTag("MainCamera");
         playerCamera.transform.rotation = hoopContainer.transform.rotation;
         PlayerScript.cutsceneMode = true;
-        PlayerScript.StopSwing();
         repeatCount = 0;
-        PlayerScript.rb.mass = 0;
-        PlayerScript.transform.position = hoopForward.transform.position;
-        while (repeatCount < 10)
-        {
-            PlayerScript.transform.position += hoopForward.transform.localPosition;
-            yield return new WaitForSecondsRealtime(0.05f);
-            repeatCount++;
-        }
-        PlayerScript.rb.mass = 2;
+        //PlayerScript.rb.useGravity = false;
+        //hoopTeleportPoints = transform.position;
+        //while (repeatCount < 10)
+        //{
+        //    PlayerScript.transform.position = hoopTeleportPoints;
+        //   hoopTeleportPoints += (transform.localPosition + new Vector3(-0.5f, 0, 0));
+        //    yield return new WaitForSecondsRealtime(0.05f);
+        //    repeatCount++;
+        //}
+        //PlayerScript.rb.useGravity = true;
+        PlayerScript.rb.velocity += (hoopForward.transform.position - transform.position);
+        PlayerScript.rb.useGravity = false;
+        yield return new WaitForSecondsRealtime(0.5f);
+        PlayerScript.rb.useGravity = true;
         PlayerScript.cutsceneMode = false;
         hoopRunning = false;
     }

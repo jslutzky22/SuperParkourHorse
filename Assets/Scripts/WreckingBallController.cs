@@ -7,68 +7,51 @@ using UnityEngine.Experimental.AI;
 public class WreckingBallController : MonoBehaviour
 {
     [SerializeField] private bool swinging;
-    // Start is called before the first frame update
-    void Start()
-    {
-        swinging = false;
-    }
 
     private void FixedUpdate()
     {
-        if (!swinging)
+        if (transform.localEulerAngles.x > 70 && transform.localEulerAngles.x < 180)
         {
-            if (transform.eulerAngles.x == -70)
-            {   
-                transform.Rotate(1, 0, 0, Space.World);
-                StartCoroutine(WaitForSwingToStart());
-                while (transform.eulerAngles.x < 70)
-                {
-                    StartCoroutine(SwingToPositive());
-                }
-            }
-            if (transform.eulerAngles.x == 70)
-            {
-                transform.Rotate(-1, 0, 0, Space.World);
-                StartCoroutine(WaitForSwingToStart());
-                while (transform.eulerAngles.x > -70)
-                {
-                    StartCoroutine(SwingToNegative());
-                }
-            }
+            StopCoroutine(PauseBeforeNextSwingOne());
+            StopCoroutine(PauseBeforeNextSwingTwo());
+            transform.localEulerAngles = new Vector3(69, 0, 0);
+            StartCoroutine(PauseBeforeNextSwingOne());
         }
-        if (swinging)
+        if (transform.localEulerAngles.x < 290 && transform.localEulerAngles.x > 180)
         {
-            if (transform.eulerAngles.x == 70)
-            {
-                transform.Rotate(0, 0, 0, Space.World);
-                StartCoroutine(WaitForSwing());
-            }
-            if (transform.eulerAngles.x == -70)
-            {
-                transform.Rotate(0, 0, 0, Space.World);
-                StartCoroutine(WaitForSwing());
-            }
+            StopCoroutine(PauseBeforeNextSwingOne());
+            StopCoroutine(PauseBeforeNextSwingTwo());
+            transform.localEulerAngles = new Vector3 (291, 0, 0);
+            StartCoroutine(PauseBeforeNextSwingTwo());
         }
     }
 
-    IEnumerator WaitForSwing()
+    IEnumerator PauseBeforeNextSwingOne()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
-        swinging = false;
+        if (!swinging)
+        {
+            swinging = true;
+            yield return new WaitForSecondsRealtime(1f);
+            while (transform.localEulerAngles.x < 70 || transform.localEulerAngles.x > 290)
+            {
+                transform.localEulerAngles += new Vector3(-1, 0, 0);
+                yield return new WaitForSecondsRealtime(0.01f);
+            }
+            swinging = false;
+        }
     }
-    IEnumerator WaitForSwingToStart()
+    IEnumerator PauseBeforeNextSwingTwo()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
-        swinging = true;
-    }
-    IEnumerator SwingToPositive()
-    {
-        transform.Rotate(1, 0, 0, Space.World);
-        yield return new WaitForSecondsRealtime(0.1f);
-    }
-    IEnumerator SwingToNegative()
-    {
-        transform.Rotate(-1, 0, 0, Space.World);
-        yield return new WaitForSecondsRealtime(0.1f);
+        if (!swinging)
+        {
+            swinging = true;
+            yield return new WaitForSecondsRealtime(1f);
+            while (transform.localEulerAngles.x < 70 || transform.localEulerAngles.x > 290)
+            {
+                transform.localEulerAngles += new Vector3(1, 0, 0);
+                yield return new WaitForSecondsRealtime(0.01f);
+            }
+            swinging = false;
+        }
     }
 }

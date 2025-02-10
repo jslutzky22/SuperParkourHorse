@@ -61,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
     private bool resetPressed;
     public static PlayerMovement Instance;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip walkingSound;
+
+
     [Header("CutsceneMode")]
     [SerializeField] public bool cutsceneMode;
 
@@ -76,6 +81,16 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions.FindAction("Move");
+
+        // Initialize audio source if not set in Inspector
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.clip = walkingSound;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
     }
 
     // Update is called once per frame
@@ -83,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
         if (grounded)
         {
             rb.drag = groundDrag;
@@ -91,28 +107,31 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.drag = 0;
         }
+
         SpeedControl();
         if (joint != null)
         {
             AirMovement();
         }
         CheckForSwingPoints();
-        //Debug.Log(grounded);
-        //Debug.Log(horizontal);
-        //Debug.Log(vertical);
+
         xVelocity = Mathf.Abs(rb.velocity.x);
         zVelocity = Mathf.Abs(rb.velocity.z);
 
-        if (xVelocity < 0.5f && xVelocity > 0)
-        {
-            xVelocity = 0.5f;
-        }
-        if (zVelocity < 0.5f && zVelocity > 0)
-        {
-            zVelocity = 0.5f;
-        }
+        if (xVelocity < 0.5f && xVelocity > 0) xVelocity = 0.5f;
+        if (zVelocity < 0.5f && zVelocity > 0) zVelocity = 0.5f;
 
         currentSpeed = xVelocity + zVelocity;
+
+        // Walking sound logic
+        if (grounded && currentSpeed > 0.5f && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        else if ((!grounded || currentSpeed <= 0.5f) && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
     private void LateUpdate()
     {
@@ -378,32 +397,34 @@ public class PlayerMovement : MonoBehaviour
 
     private void AirMovement()
     {
-        if (horizontal == 1) //Pressing Right
+        // Unlimited horizontal movement
+        rb.AddForce(orientation.right * horizontal * horizontalThrustForce * Time.deltaTime, ForceMode.Acceleration);
+        rb.AddForce(orientation.forward * vertical * forwardThrustForce * Time.deltaTime, ForceMode.Acceleration);
+
+        // Limited vertical movement
+        float maxVerticalVelocity = 10f; // Adjust this value to control max vertical speed
+        if (rb.velocity.y > maxVerticalVelocity)
         {
-            rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
+            rb.velocity = new Vector3(rb.velocity.x, maxVerticalVelocity, rb.velocity.z);
         }
-        if (horizontal == -1) //Pressing left
+        if (rb.velocity.y < -maxVerticalVelocity)
         {
-            rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
+            rb.velocity = new Vector3(rb.velocity.x, -maxVerticalVelocity, rb.velocity.z);
         }
-        if (vertical == 1) //Pressing Forward
-        {
-            rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
-        }
-        if (shortenCable == true)
+
+        if (shortenCable)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
-            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
+            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime, ForceMode.Acceleration);
 
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
-
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
         }
-        if (vertical == -1) //Pressing backward
+
+        if (vertical == -1) // Pressing backward
         {
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
-
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
             joint.minDistance = extendedDistanceFromPoint * 0.25f;
         }
@@ -456,5 +477,6 @@ public class PlayerMovement : MonoBehaviour
     private void LoadToCheckpoint()
     {
         transform.position = this.lastCheckpointActivated + new Vector3 (0,1,0);
+        rb.velocity = Vector3.zero;
     }
 }

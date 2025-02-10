@@ -21,9 +21,8 @@ public class WreckingBallController : MonoBehaviour
             {   
                 transform.Rotate(1, 0, 0, Space.World);
                 StartCoroutine(WaitForSwingToStart());
-                //while (transform.eulerAngles.x < 70)
+                while (transform.eulerAngles.x < 70)
                 {
-                    transform.Rotate(1, 0, 0, Space.World);
                     StartCoroutine(SwingToPositive());
                 }
             }

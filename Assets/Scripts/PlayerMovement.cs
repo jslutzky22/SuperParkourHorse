@@ -482,8 +482,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            
+            SceneManager.LoadScene("EndScene");
+
         }
     }
 

@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private RaycastHit predictionHit;
     [SerializeField] private float predictionSphereCastRadius;
     [SerializeField] private Transform predictionPoint;
+    private bool increaseWeight;
 
 
     [Header("Ground Check")]
@@ -81,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions.FindAction("Move");
+        increaseWeight = false;
 
         // Initialize audio source if not set in Inspector
         if (audioSource == null)
@@ -102,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.drag = groundDrag;
+            increaseWeight = false;
         }
         else
         {
@@ -132,6 +135,15 @@ public class PlayerMovement : MonoBehaviour
         {
             audioSource.Stop();
         }
+
+        if (increaseWeight == true)
+        {
+            rb.mass = 4;
+        }
+        else
+        {
+            rb.mass = 2;
+        }
     }
     private void LateUpdate()
     {
@@ -154,6 +166,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (readyToJump && grounded)
                 {
+                    increaseWeight = false;
                     readyToJump = false;
                     Jump();
                     Invoke(nameof(ResetJump), jumpCooldown);
@@ -166,6 +179,7 @@ public class PlayerMovement : MonoBehaviour
             if (context.canceled)
             {
                 shortenCable = false;
+
             }
         }
     }
@@ -193,10 +207,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartSwing();
                 Debug.Log("swingShot");
+                increaseWeight = false;
             }
             if (context.canceled)
             {
                 StopSwing();
+                if (grounded == false)
+                {
+                    increaseWeight = true;
+                }
             }
         }
         if (context.canceled)
@@ -435,6 +454,7 @@ public class PlayerMovement : MonoBehaviour
         Destroy(joint);
         swinging = false;
         moveSpeed = defaultSpeed;
+        
     }
     private void DrawRope()
     {

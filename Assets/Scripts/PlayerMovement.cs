@@ -256,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!cutsceneMode)
         {
-            rb.velocity = new Vector3(rb.velocity.y, 0f, rb.velocity.z);
+            //rb.velocity = new Vector3(rb.velocity.y, 0f, rb.velocity.z);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }

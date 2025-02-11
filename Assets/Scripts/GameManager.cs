@@ -31,11 +31,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject pauseMenuUI;
 
+    public PlayerMovement PlayerScript;
+
     // Timer & Countdown
     void Start()
     {
-       
-               myPlayerInput.currentActionMap.Enable();
+        PlayerScript = PlayerMovement.Instance;
+
+        myPlayerInput.currentActionMap.Enable();
         pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
 
         pauseAction.started += Pause_started;
@@ -54,7 +57,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator CountdownCoroutine()
     {
-
+        PlayerScript.cutsceneMode = true;
         countdownText.text = "3";
         yield return new WaitForSeconds(1.0f);
         countdownText.text = "2";
@@ -63,6 +66,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         countdownText.text = "Go!";
         gameStarted = true;
+        PlayerScript.cutsceneMode = false;
 
 
 

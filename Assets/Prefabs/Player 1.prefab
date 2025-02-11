@@ -434,7 +434,7 @@ MonoBehaviour:
   airMultiplier: 0.3
   currentSpeed: 0
   speedMult: 0.06
-  speedBase: 0.06
+  speedBase: 0.1
   maxSpeed: 0
   xVelocity: 0
   zVelocity: 0
@@ -460,6 +460,7 @@ MonoBehaviour:
   lastCheckpointActivated: {x: 0, y: 0, z: 0}
   audioSource: {fileID: 1082192230755605765}
   walkingSound: {fileID: 8300000, guid: 04d5c9b59a80a58498a4c4bf6b7c22a4, type: 3}
+  cutsceneMode: 0
 --- !u!114 &4980719243399544969
 MonoBehaviour:
   m_ObjectHideFlags: 0

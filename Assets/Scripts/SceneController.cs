@@ -16,6 +16,24 @@ public class SceneController : MonoBehaviour
 
     }
 
+    public void LoadVerticalCup()
+    {
+        SceneManager.LoadScene("Vertical");
+
+    }
+
+    public void LoadHorizontalCup()
+    {
+        SceneManager.LoadScene("Horizontal");
+
+    }
+
+    public void LoadPreciseCup()
+    {
+        SceneManager.LoadScene("Precise");
+
+    }
+
 
     public void ExitButton()
     {

@@ -15,17 +15,21 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxDistance = finish.transform.position.x;
-        progressBar.fillAmount = player.transform.position.x / maxDistance;
+        maxDistance = Mathf.Abs(finish.transform.position.x) + Mathf.Abs(finish.transform.position.y) + 
+            Mathf.Abs(finish.transform.position.z);
+        progressBar.fillAmount = (Mathf.Abs(player.transform.position.x) + Mathf.Abs(player.transform.position.y) +
+            Mathf.Abs(player.transform.position.z))  / maxDistance;
     }
+
+    //absolute value might not be necessary idk
 
     // Update is called once per frame
     void Update()
     {
         if (progressBar.fillAmount < 1)
         {
-            progressBar.fillAmount = player.transform.position.x / maxDistance;
+            progressBar.fillAmount = (Mathf.Abs(player.transform.position.x) + Mathf.Abs(player.transform.position.y) +
+    Mathf.Abs(player.transform.position.z)) / maxDistance;
         }
-        
     }
 }

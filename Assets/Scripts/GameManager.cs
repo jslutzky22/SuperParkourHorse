@@ -17,10 +17,13 @@ public class GameManager : MonoBehaviour
     public GameObject countdownTextSprite;
 
     public float currentTime;
-    public float raceTime;
+    public float activeTime;
+    private float raceTime;
+    private float maxTime;
     [SerializeField] private Image enemyProgressBar;
 
     private bool countUp = false;
+    //private bool countUpBackground = true;
     public bool gameStarted;
     public bool gameFinished;
     public static bool gameIsPaused = false;
@@ -36,24 +39,47 @@ public class GameManager : MonoBehaviour
     // Timer & Countdown
     void Start()
     {
+        if (myPlayerInput == null)
+        {
+            myPlayerInput = GetComponent<PlayerInput>();  
+        }
+        if (myPlayerInput != null)
+        {
+            myPlayerInput.currentActionMap.Enable();
+            pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
+
+            if (pauseAction != null)
+            {
+                pauseAction.started += Pause_started;
+            }
+            
+        }
+       
+
+
         PlayerScript = PlayerMovement.Instance;
 
         myPlayerInput.currentActionMap.Enable();
         pauseAction = myPlayerInput.currentActionMap.FindAction("Pause");
 
         pauseAction.started += Pause_started;
-
-        enemyProgressBar.fillAmount = currentTime / raceTime;
+        maxTime = currentTime;
+        //activeTime = maxTime;
+        enemyProgressBar.fillAmount = activeTime / currentTime;
 
         StartCoroutine(CountdownCoroutine());
+        //currentTime = maxTime;
 
     }
 
-    void OnDestroy() 
-    
-         {
-        pauseAction.started -= Pause_started;
+    void OnDestroy()
+    {
+        if (pauseAction != null)
+        {
+            pauseAction.started -= Pause_started;
+        }
     }
+
 
     IEnumerator CountdownCoroutine()
     {
@@ -82,6 +108,7 @@ public class GameManager : MonoBehaviour
         if (gameStarted)
         {
             currentTime = countUp ? currentTime += Time.deltaTime : currentTime -= Time.deltaTime;
+            activeTime = raceTime += Time.deltaTime;
             SetTimerText();
         }
         else if (gameFinished)
@@ -91,10 +118,12 @@ public class GameManager : MonoBehaviour
         }
         if (enemyProgressBar.fillAmount < 1)
         {
-            enemyProgressBar.fillAmount = currentTime / raceTime;
+            enemyProgressBar.fillAmount = activeTime / maxTime;
+
+            //enemyProgressBar.fillAmount = maxTime / -raceTime;
         }
 
-        if (currentTime <= raceTime)
+        if (currentTime <= 0)
         {
             LoadLoseScene();
         }
@@ -160,7 +189,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         // Resetting necessary game variables
-        currentTime = 0;
+        //currentTime = 0;
         gameStarted = false;
         gameFinished = false;
         gameIsPaused = false;

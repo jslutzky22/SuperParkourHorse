@@ -11,14 +11,22 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] private Image progressBar;
     [SerializeField] private float maxDistance;
     [SerializeField] private float raceTime;
+    [SerializeField] private bool verticalRace;
    
     // Start is called before the first frame update
     void Start()
     {
-        maxDistance = Mathf.Abs(finish.transform.position.x) + Mathf.Abs(finish.transform.position.y) + 
-            Mathf.Abs(finish.transform.position.z);
-        progressBar.fillAmount = (Mathf.Abs(player.transform.position.x) + Mathf.Abs(player.transform.position.y) +
-            Mathf.Abs(player.transform.position.z))  / maxDistance;
+        if (verticalRace)
+        {
+            maxDistance = finish.transform.position.y;
+            progressBar.fillAmount = player.transform.position.y / maxDistance;
+        }
+        if (verticalRace == false)
+        {
+            maxDistance = finish.transform.position.x;
+            progressBar.fillAmount = player.transform.position.x / maxDistance;
+        }
+       
     }
 
     //absolute value might not be necessary idk
@@ -26,10 +34,13 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (progressBar.fillAmount < 1)
+        if (progressBar.fillAmount < 1 && verticalRace == false)
         {
-            progressBar.fillAmount = (Mathf.Abs(player.transform.position.x) + Mathf.Abs(player.transform.position.y) +
-    Mathf.Abs(player.transform.position.z)) / maxDistance;
+            progressBar.fillAmount = player.transform.position.x / maxDistance;
+        }
+        if (progressBar.fillAmount < 1 && verticalRace == true)
+        {
+            progressBar.fillAmount = player.transform.position.y / maxDistance;
         }
     }
 }

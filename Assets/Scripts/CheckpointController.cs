@@ -28,7 +28,7 @@ public class CheckpointController : MonoBehaviour
         PlayerScript.lastCheckpointActivated = checkpointPosition;
         StartCoroutine(CheckpointTextOnAndOff());
     }
-
+     
     IEnumerator CheckpointTextOnAndOff()
     {
         CheckpointText.SetActive(true);

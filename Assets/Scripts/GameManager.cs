@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public float raceTime;
     [SerializeField] private Image enemyProgressBar;
 
-    private bool countUp = true;
+    private bool countUp = false;
     public bool gameStarted;
     public bool gameFinished;
     public static bool gameIsPaused = false;
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             enemyProgressBar.fillAmount = currentTime / raceTime;
         }
 
-        if (currentTime >= raceTime)
+        if (currentTime <= raceTime)
         {
             LoadLoseScene();
         }

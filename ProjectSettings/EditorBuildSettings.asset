@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/ActualScenes/Start Menu.unity
     guid: f6901f3fdc0151b479ecd6707e05a820
   - enabled: 1
-    path: Assets/Scenes/ActualScenes/Main Scene.unity
-    guid: fe3d05abb95baf84dad971ffb6e1232d
+    path: Assets/Scenes/VerticalRace.unity
+    guid: ce10a27f34a980746ac42d75939ce500
   - enabled: 1
     path: Assets/Scenes/ActualScenes/EndScene.unity
     guid: c395779e048c09e44bb1097529b96b13

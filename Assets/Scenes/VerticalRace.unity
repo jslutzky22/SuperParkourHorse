@@ -1965,6 +1965,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        3/7'
+      objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
       value: Archway (1)
@@ -5434,6 +5441,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        5/7'
+      objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
       value: Archway (1)
@@ -8101,6 +8115,13 @@ PrefabInstance:
     - target: {fileID: 1087480105884466386, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        1/7'
       objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
@@ -15046,6 +15067,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        4/7'
+      objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
       value: Archway (1)
@@ -15596,6 +15624,13 @@ PrefabInstance:
     - target: {fileID: 1087480105884466386, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        6/7'
       objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
@@ -17326,6 +17361,13 @@ PrefabInstance:
     - target: {fileID: 1087480105884466386, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        7/7'
       objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name
@@ -19663,6 +19705,13 @@ PrefabInstance:
     - target: {fileID: 1087480105884466386, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7805220730764636521, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
+      propertyPath: m_text
+      value: 'Checkpoint Reached!
+
+
+        2/7'
       objectReference: {fileID: 0}
     - target: {fileID: 8828676037813868545, guid: a584061a5b4d4e34dbff5232977b7fdb, type: 3}
       propertyPath: m_Name

@@ -30,7 +30,6 @@ public class DashHorseHoop : MonoBehaviour
         hoopRunning = true;
         playerCamera = GameObject.FindWithTag("MainCamera");
         playerCamera.transform.rotation = hoopContainer.transform.rotation;
-        PlayerScript.cutsceneMode = true;
         repeatCount = 0;
         //PlayerScript.rb.useGravity = false;
         //hoopTeleportPoints = transform.position;
@@ -42,11 +41,10 @@ public class DashHorseHoop : MonoBehaviour
         //    repeatCount++;
         //}
         //PlayerScript.rb.useGravity = true;
-        PlayerScript.rb.velocity += (hoopForward.transform.position - transform.position);
+        PlayerScript.rb.velocity += hoopForward.transform.localPosition;
         PlayerScript.rb.useGravity = false;
         yield return new WaitForSecondsRealtime(0.5f);
         PlayerScript.rb.useGravity = true;
-        PlayerScript.cutsceneMode = false;
         hoopRunning = false;
     }
 }

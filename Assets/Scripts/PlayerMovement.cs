@@ -243,8 +243,6 @@ public class PlayerMovement : MonoBehaviour
 
     void MovePlayer()
     {
-        if (!cutsceneMode)
-        {
             //Debug.Log(moveAction.ReadValue<Vector2>());
             //rb.velocity = new Vector3(horizontal * moveSpeed, rb.velocity.y, vertical * moveSpeed);
             _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
@@ -285,7 +283,6 @@ public class PlayerMovement : MonoBehaviour
             //for speedmult it cannot go at or below 0.05, 0.06 or above works
             //speedmult is the percentage of current speed added to current speed to add acceleration
             //speedbase is the amount added to currentspeed so it doesnt multiply everything by 0
-        }
     }
 
     private void Jump()

@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     bool grounded;
     bool shortenCable;
+    bool autoShortenCable;
 
     [Header("Checkpoints")]
     public Vector3 lastCheckpointActivated;
@@ -222,9 +223,11 @@ public class PlayerMovement : MonoBehaviour
                 StartSwing();
                 Debug.Log("swingShot");
                 increaseWeight = false;
+                autoShortenCable = true;
             }
             if (context.canceled)
             {
+                autoShortenCable = false;
                 StopSwing();
                 if (grounded == false)
                 {
@@ -447,6 +450,16 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -maxVerticalVelocity, rb.velocity.z);
         }
 
+        if (autoShortenCable)
+        {
+            Vector3 directionToPoint = swingPoint - transform.position;
+            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime/5, ForceMode.Acceleration);
+
+            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
+            joint.maxDistance = distanceFromPoint * 0.8f;
+            joint.minDistance = distanceFromPoint * 0.25f;
+        }
+
         if (shortenCable)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
@@ -499,7 +512,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneManager.LoadScene("EndScene");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
 

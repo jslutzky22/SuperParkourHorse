@@ -18,7 +18,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadVerticalCup()
     {
-        SceneManager.LoadScene("Vertical");
+        SceneManager.LoadScene("VerticalRace");
 
     }
 

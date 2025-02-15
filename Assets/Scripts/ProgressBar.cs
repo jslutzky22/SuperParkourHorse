@@ -11,21 +11,36 @@ public class ProgressBar : MonoBehaviour
     [SerializeField] private Image progressBar;
     [SerializeField] private float maxDistance;
     [SerializeField] private float raceTime;
+    [SerializeField] private bool verticalRace;
    
     // Start is called before the first frame update
     void Start()
     {
-        maxDistance = finish.transform.position.x;
-        progressBar.fillAmount = player.transform.position.x / maxDistance;
+        if (verticalRace)
+        {
+            maxDistance = finish.transform.position.y;
+            progressBar.fillAmount = player.transform.position.y / maxDistance;
+        }
+        if (verticalRace == false)
+        {
+            maxDistance = finish.transform.position.x;
+            progressBar.fillAmount = player.transform.position.x / maxDistance;
+        }
+       
     }
+
+    //absolute value might not be necessary idk
 
     // Update is called once per frame
     void Update()
     {
-        if (progressBar.fillAmount < 1)
+        if (progressBar.fillAmount < 1 && verticalRace == false)
         {
             progressBar.fillAmount = player.transform.position.x / maxDistance;
         }
-        
+        if (progressBar.fillAmount < 1 && verticalRace == true)
+        {
+            progressBar.fillAmount = player.transform.position.y / maxDistance;
+        }
     }
 }

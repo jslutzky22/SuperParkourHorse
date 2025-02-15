@@ -7,11 +7,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-//using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI countdownText;
     public GameObject countdownTextSprite;
@@ -33,6 +31,9 @@ public class GameManager : MonoBehaviour
 
     public PlayerMovement PlayerScript;
 
+    // Music
+    [SerializeField] private AudioSource backgroundMusic;
+
     // Timer & Countdown
     void Start()
     {
@@ -47,11 +48,15 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(CountdownCoroutine());
 
+        // Play background music if assigned
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Play();
+        }
     }
 
-    void OnDestroy() 
-    
-         {
+    void OnDestroy()
+    {
         pauseAction.started -= Pause_started;
     }
 
@@ -67,9 +72,6 @@ public class GameManager : MonoBehaviour
         countdownText.text = "Go!";
         gameStarted = true;
         PlayerScript.cutsceneMode = false;
-
-
-
 
         yield return new WaitForSeconds(1.0f);
         countdownText.text = "";
@@ -87,7 +89,6 @@ public class GameManager : MonoBehaviour
         else if (gameFinished)
         {
             gameStarted = false;
-
         }
         if (enemyProgressBar.fillAmount < 1)
         {
@@ -98,7 +99,6 @@ public class GameManager : MonoBehaviour
         {
             LoadLoseScene();
         }
-
     }
 
     public void LoadLoseScene()
@@ -107,16 +107,12 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("Lose Scene");
         Debug.Log("You've Lost");
-
     }
 
     private void SetTimerText()
     {
         timerText.text = currentTime.ToString("00.00");
-
     }
-
-
 
     private void Pause_started(InputAction.CallbackContext context)
     {
@@ -125,15 +121,12 @@ public class GameManager : MonoBehaviour
         if (gameIsPaused)
         {
             Pause();
-            //Cursor.lockState = CursorLockMode.None;
         }
         else
         {
             Resume();
-            //Cursor.lockState = CursorLockMode.Locked;
         }
     }
-
 
     // Pause Controls
     public void Pause()
@@ -144,7 +137,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         gameIsPaused = true;
 
-
+        // Pause music
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Pause();
+        }
     }
 
     public void Resume()
@@ -155,6 +152,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         gameIsPaused = false;
 
+        // Resume music
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Play();
+        }
     }
 
     public void RestartGame()
@@ -164,7 +166,6 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         gameFinished = false;
         gameIsPaused = false;
-        
 
         // Resuming time in case the game is paused
         Time.timeScale = 1f;
@@ -177,11 +178,9 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
     public void LoadStartMenu()
     {
         SceneManager.LoadScene("Start Menu");
-
     }
-
-
 }

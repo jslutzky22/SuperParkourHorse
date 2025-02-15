@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float zVelocity;
     bool readyToJump = true;
     [SerializeField] private float accelerationAmount;
+
     [Header("Grapple Stuff")]
     [SerializeField] private LineRenderer lr;
     [SerializeField] private Transform gunTip, cam, player;
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 currentGrapplePosition;
     [SerializeField] private float swingSpeed;
     bool swinging;
+
     [Header("AirMovement")]
     [SerializeField] private float horizontalThrustForce;
     [SerializeField] private float forwardThrustForce;
@@ -65,10 +67,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip walkingSound;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip grappleSound;
 
 
     [Header("CutsceneMode")]
     [SerializeField] public bool cutsceneMode;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
 
     private void Awake()
     {
@@ -83,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions.FindAction("Move");
         increaseWeight = false;
+        animator = GetComponent<Animator>();
 
         // Initialize audio source if not set in Inspector
         if (audioSource == null)
@@ -90,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
         }
 
+        audioSource.clip = walkingSound;
         audioSource.clip = walkingSound;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
@@ -144,7 +154,11 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.mass = 2;
         }
+
+        bool isWalking = (horizontal != 0 || vertical != 0) && grounded;
+        animator.SetBool("isWalking", isWalking);
     }
+
     private void LateUpdate()
     {
         DrawRope();
@@ -362,6 +376,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!cutsceneMode)
         {
+            PlayGrappleSound();
             if (predictionHit.point == Vector3.zero) return;
             //RaycastHit hit;
             //Debug.DrawRay(player.position, cam.forward * maxSwingDistance, Color.red, 2f);
@@ -405,13 +420,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.LogError("SpringJoint not created!");
             }
-
             //}
             //else
             //{
             //Debug.Log("No grapple hit.");
             //}
         }
+
+
     }
 
     private void AirMovement()
@@ -475,6 +491,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (KillPlane.gameObject.tag == "KillPlane")
         {
+            PlayDeathSound();
             LoadToCheckpoint();
         }
 
@@ -490,7 +507,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
+    private void PlayDeathSound()
+    {
+        if (audioSource != null && deathSound != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
+    }
+    private void PlayGrappleSound()
+    {
+        if (audioSource != null && deathSound != null)
+        {
+            audioSource.PlayOneShot(grappleSound);
+        }
+    }
 
     /// <summary>
     /// Called when the player falls onto the killplane (or if we implement a last checkpoint button, there too) to 

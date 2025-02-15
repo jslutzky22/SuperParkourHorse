@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour
     }
     public void LoadStartMenu()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Start Menu");
 
     }

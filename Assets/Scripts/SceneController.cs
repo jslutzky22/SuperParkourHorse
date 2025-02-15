@@ -24,7 +24,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadHorizontalCup()
     {
-        SceneManager.LoadScene("Horizontal");
+        SceneManager.LoadScene("HorizontalTrack");
 
     }
 

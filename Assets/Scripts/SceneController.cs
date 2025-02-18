@@ -30,7 +30,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadPreciseCup()
     {
-        SceneManager.LoadScene("Precise");
+        SceneManager.LoadScene("TheFinalTrack");
 
     }
 

@@ -3355,8 +3355,8 @@ Transform:
   m_GameObject: {fileID: 208496865}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.764768, y: 1.8913518, z: 44.782948}
-  m_LocalScale: {x: 1, y: 12.1725, z: 64.881584}
+  m_LocalPosition: {x: 12.764768, y: 1.8913518, z: 33.7955}
+  m_LocalScale: {x: 1, y: 12.1725, z: 86.85698}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 742068172}
@@ -7310,8 +7310,8 @@ Transform:
   m_GameObject: {fileID: 504053354}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61523247, y: 1.8913518, z: 24.275349}
-  m_LocalScale: {x: 1, y: 12.1725, z: 23.865807}
+  m_LocalPosition: {x: -0.6152, y: 1.8913518, z: 13.2985}
+  m_LocalScale: {x: 1, y: 12.1725, z: 45.81996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 742068172}
@@ -11313,7 +11313,7 @@ Transform:
   m_GameObject: {fileID: 759329602}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.0709677, y: 1.9890518, z: 12.958553}
+  m_LocalPosition: {x: 6.0709677, y: 1.9890518, z: -8.9}
   m_LocalScale: {x: 14.34615, y: 12.085865, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12952,6 +12952,7 @@ MonoBehaviour:
   maxDistance: 0
   raceTime: 0
   verticalRace: 0
+  zAxisRace: 0
 --- !u!114 &855104428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21741,7 +21742,7 @@ MonoBehaviour:
   timerText: {fileID: 1048852450}
   countdownText: {fileID: 188384591}
   countdownTextSprite: {fileID: 188384589}
-  currentTime: 10000
+  currentTime: 400
   activeTime: 0
   enemyProgressBar: {fileID: 343473646}
   gameStarted: 0

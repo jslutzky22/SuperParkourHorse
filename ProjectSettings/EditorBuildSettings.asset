@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ActualScenes/Win2.unity
     guid: 63bc5514e5b420649a20dd0a6802b2e8
   - enabled: 1
-    path: Assets/Scenes/TheFinalTrack.unity
+    path: Assets/Scenes/ActualScenes/TheFinalTrack.unity
     guid: 0a52600e22ec988439287d4b7ce34e41
   - enabled: 1
     path: Assets/Scenes/ActualScenes/Win3.unity

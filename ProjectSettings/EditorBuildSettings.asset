@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ActualScenes/Win1.unity
     guid: c395779e048c09e44bb1097529b96b13
   - enabled: 1
-    path: Assets/Scenes/ActualScenes/HorizontalTrack.unity
+    path: Assets/Scenes/ActualScenes/SmHorizontalTrack.unity
     guid: 58c5be165511b784fac597a6da7dad20
   - enabled: 1
     path: Assets/Scenes/ActualScenes/Win2.unity

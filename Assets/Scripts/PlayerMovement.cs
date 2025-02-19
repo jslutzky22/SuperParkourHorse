@@ -246,7 +246,7 @@ public class PlayerMovement : MonoBehaviour
             //Debug.Log(moveAction.ReadValue<Vector2>());
             //rb.velocity = new Vector3(horizontal * moveSpeed, rb.velocity.y, vertical * moveSpeed);
             _moveDirection = orientation.forward * vertical + orientation.right * horizontal;
-            if (grounded)
+            if (grounded && !cutsceneMode)
             {
                 accelerationAmount = (currentSpeed * speedMult);
 
@@ -262,7 +262,7 @@ public class PlayerMovement : MonoBehaviour
 
                 rb.AddForce(_moveDirection.normalized * accelerationAmount * moveSpeed * 10f, ForceMode.Force);
             }
-            else if (!grounded)
+            else if (!grounded && !cutsceneMode)
             {
                 accelerationAmount = (currentSpeed * speedMult);
 
@@ -507,9 +507,29 @@ public class PlayerMovement : MonoBehaviour
 
         if (KillPlane.gameObject.tag == "Goal")
         {
+            Scene scene = SceneManager.GetActiveScene();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Debug.Log(scene);
+
+            //if (scene.name == "VerticalRace" || scene.name == "SmVerticalRace")
+            if (SceneManager.GetActiveScene().buildIndex == 1 || SceneManager.GetActiveScene().buildIndex == 2)
+            {
+                SceneManager.LoadScene("Win1");
+
+            }
+            if (SceneManager.GetActiveScene().buildIndex == 4 || SceneManager.GetActiveScene().buildIndex == 5)
+            {
+                SceneManager.LoadScene("Win2");
+
+            }
+            if (SceneManager.GetActiveScene().buildIndex == 7 || SceneManager.GetActiveScene().buildIndex == 8)
+            {
+                SceneManager.LoadScene("Win3");
+            }
+
+
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
 

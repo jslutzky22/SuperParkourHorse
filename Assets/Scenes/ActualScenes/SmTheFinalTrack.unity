@@ -2218,6 +2218,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6396efcfa22ea9645add28ae59b91172, type: 3}
+--- !u!1 &433809379 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8828676037813868545, guid: 6396efcfa22ea9645add28ae59b91172, type: 3}
+  m_PrefabInstance: {fileID: 433809378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &439695663
 GameObject:
   m_ObjectHideFlags: 0
@@ -7397,7 +7402,7 @@ MonoBehaviour:
   timerText: {fileID: 1687783258}
   countdownText: {fileID: 2017209814}
   countdownTextSprite: {fileID: 2017209812}
-  currentTime: 1000
+  currentTime: 500
   activeTime: 0
   enemyProgressBar: {fileID: 2015112821}
   gameStarted: 0
@@ -8643,7 +8648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 984620531}
-  finish: {fileID: 961160688}
+  finish: {fileID: 433809379}
   progressBar: {fileID: 1801734743}
   maxDistance: 0
   raceTime: 0

@@ -16,6 +16,24 @@ public class SceneController : MonoBehaviour
 
     }
 
+    public void LoadSmVerticalCup()
+    {
+        SceneManager.LoadScene("SmVerticalRace");
+
+    }
+
+    public void LoadSmHorizontalCup()
+    {
+        SceneManager.LoadScene("SmHorizontalTrack");
+
+    }
+
+    public void LoadSmPreciseCup()
+    {
+        SceneManager.LoadScene("SmTheFinalTrack");
+
+    }
+
     public void LoadVerticalCup()
     {
         SceneManager.LoadScene("VerticalRace");
